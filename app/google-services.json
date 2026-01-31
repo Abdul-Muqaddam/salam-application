@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "788123730832",
+    "project_id": "salamnew-7accb",
+    "storage_bucket": "salamnew-7accb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:788123730832:android:4cfa487dd410e60e01e915",
+        "android_client_info": {
+          "package_name": "com.webinane.salam"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRXsb8GYQBNDUnuDgHwPo69Iz2S2A_k3k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
