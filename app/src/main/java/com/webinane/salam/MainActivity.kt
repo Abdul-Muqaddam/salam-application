@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.webinane.salam.ui.home.HomeScreen
 import com.webinane.salam.ui.NotificationScreen
 import com.webinane.salam.ui.PrayerTimesScreen
 import com.webinane.salam.ui.navigation.Routes
@@ -37,7 +38,14 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = Routes.Home) {
                     composable<Routes.Home> {
+                        HomeScreen(
+                            onNavigatePrayerTimes = { navController.navigate(Routes.PrayerTimes) },
+                            onNavigateNotifications = { navController.navigate(Routes.Notifications) }
+                        )
+                    }
+                    composable<Routes.PrayerTimes> {
                         PrayerTimesScreen(
+                            onNavigateHome = { navController.navigateUp() },
                             onNavigateNotifications = { navController.navigate(Routes.Notifications) }
                         )
                     }

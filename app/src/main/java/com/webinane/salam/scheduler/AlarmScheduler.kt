@@ -7,13 +7,16 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
-import com.webinane.salam.data.model.PrayerTiming
+import com.webinane.salam.domain.model.PrayerTimes
 import com.webinane.salam.receiver.PrayerNotificationReceiver
 import java.util.Calendar
 import kotlinx.coroutines.*
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 interface AlarmScheduler {
-    fun schedule(item: PrayerTiming, targetDateInMillis: Long = System.currentTimeMillis())
+    fun schedule(item: PrayerTimes, targetDateInMillis: Long = System.currentTimeMillis())
+    fun schedule(items: List<PrayerTimes>)
     fun cancelAll()
 }
 
@@ -23,10 +26,30 @@ class AndroidAlarmScheduler(
 
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    override fun schedule(item: PrayerTiming, targetDateInMillis: Long) {
-        // Reset min timer
-        minFutureTime = Long.MAX_VALUE
+    override fun schedule(items: List<PrayerTimes>) {
+        items.forEach { timing ->
+            // Extract the date from date string
+            val dateFormat = SimpleDateFormat("dd-MMM", Locale.US)
+            try {
+                val date = dateFormat.parse(timing.date)
+                if (date != null) {
+                    val cal = Calendar.getInstance()
+                    cal.time = date
+                    val baseRequestCode = (cal.get(Calendar.MONTH) * 100 + cal.get(Calendar.DAY_OF_MONTH)) * 20
+                    scheduleWithBaseCode(timing, cal.timeInMillis, baseRequestCode)
+                }
+            } catch (e: Exception) {
+                Log.e("AlarmScheduler", "Error parsing date for bulk schedule: ${timing.date}")
+            }
+        }
+    }
 
+    override fun schedule(item: PrayerTimes, targetDateInMillis: Long) {
+         scheduleWithBaseCode(item, targetDateInMillis, 0)
+    }
+
+    private fun scheduleWithBaseCode(item: PrayerTimes, targetDateInMillis: Long, baseRequestCode: Int) {
+        // Reset min timer if it's the first call in a batch (or just keep it updated)
         // Parse target date to get Year, Month, Day
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = targetDateInMillis
@@ -35,28 +58,24 @@ class AndroidAlarmScheduler(
         val month = calendar.get(Calendar.MONTH) // 0-indexed
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        // Maps of prayer name to its time string
         val timings = mapOf(
-            "Fajr" to Pair(item.fajrStart, item.fajrPrayer),
-            "Dhuhr" to Pair(item.dhuhrStart, item.dhuhrPrayer),
-            "Asr" to Pair(item.asrStart, item.asrPrayer),
-            "Maghrib" to Pair(item.maghribStart, item.maghribPrayer),
-            "Isha" to Pair(item.ishaStart, item.ishaPrayer)
+            "Fajr" to Pair(item.fajr.start, item.fajr.jamaat),
+            "Dhuhr" to Pair(item.dhuhr.start, item.dhuhr.jamaat),
+            "Asr" to Pair(item.asr.start, item.asr.jamaat),
+            "Maghrib" to Pair(item.maghrib.start, item.maghrib.jamaat),
+            "Isha" to Pair(item.isha.start, item.isha.jamaat)
         )
 
-        var requestCode = 0
+        var offset = 0
 
         timings.forEach { (prayerName, times) ->
-            // Schedule Begin Time
-            scheduleAlarm(year, month, day, times.first, prayerName, "Begin", requestCode++)
-            // Schedule Jamaat Time
-            scheduleAlarm(year, month, day, times.second, prayerName, "Jamaat", requestCode++)
+            scheduleAlarm(year, month, day, times.first, prayerName, "Begin", baseRequestCode + offset++)
+            scheduleAlarm(year, month, day, times.second, prayerName, "Jamaat", baseRequestCode + offset++)
         }
 
-        // Check for Friday Jumuah
         if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) {
-            scheduleAlarm(year, month, day, "13:00", "Jumuah 1", "Jamaat", requestCode++)
-            scheduleAlarm(year, month, day, "14:00", "Jumuah 2", "Jamaat", requestCode++)
+            scheduleAlarm(year, month, day, "13:00", "Jumuah 1", "Jamaat", baseRequestCode + offset++)
+            scheduleAlarm(year, month, day, "14:00", "Jumuah 2", "Jamaat", baseRequestCode + offset++)
         }
         
         startCountdownLogging()

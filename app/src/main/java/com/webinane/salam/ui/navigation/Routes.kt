@@ -8,4 +8,7 @@ object Routes {
 
     @Serializable
     object Notifications
+
+    @Serializable
+    object PrayerTimes
 }

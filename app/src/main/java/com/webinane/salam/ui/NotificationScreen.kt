@@ -96,7 +96,7 @@ fun NotificationScreen(
                 text = "Select Notification Sound",
                 fontSize = 16.ssp,
                 fontWeight = FontWeight.Bold,
-                color = DarkBlueNavy,
+                color = LightBlueTeal,
                 modifier = Modifier.padding(bottom = 16.sdp)
             )
 
@@ -145,7 +145,7 @@ fun NotificationScreen(
                         text = option,
                         fontSize = 14.ssp,
                         fontWeight = FontWeight.Medium,
-                        color = DarkBlueNavy
+                        color = LightBlueTeal
                     )
                 }
             }
@@ -173,10 +173,10 @@ fun NotificationScreen(
                     Icon(
                         imageVector = Icons.Default.Home,
                         contentDescription = "Home",
-                        tint = DarkBlueNavy,
+                        tint = LightBlueTeal,
                         modifier = Modifier.size(24.sdp)
                     )
-                    Text("Home Menu", color = DarkBlueNavy, fontSize = 9.ssp)
+                    Text("Home Menu", color = LightBlueTeal, fontSize = 9.ssp)
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(

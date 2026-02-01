@@ -1,8 +1,12 @@
 package com.webinane.salam.data.model
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity(tableName = "prayer_timings")
 data class PrayerTiming(
+    @PrimaryKey
+    val gregorianDate: String = "", // Used as unique identifier (e.g., "31-01-2026")
     val day: String = "",
-    val gregorianDate: String = "",
     val fajrStart: String = "",
     val sunrise: String = "",
     val dhuhrStart: String = "",

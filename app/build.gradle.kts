@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.google.devtools.ksp)
 }
 
 android {
@@ -55,6 +56,16 @@ dependencies {
     implementation(libs.koin.androidx.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
+    
+    // Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    
+    // WorkManager
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.koin.androidx.workmanager)
+
     implementation("com.github.Kaaveh:sdp-compose:1.1.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

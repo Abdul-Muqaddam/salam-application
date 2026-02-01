@@ -35,8 +35,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
+import ir.kaaveh.sdpcompose.sdp
+import ir.kaaveh.sdpcompose.ssp
 import com.webinane.salam.R
 import com.webinane.salam.ui.theme.DarkBlueNavy
 import com.webinane.salam.ui.theme.GreenText
@@ -50,16 +50,18 @@ import ir.kaaveh.sdpcompose.ssp
 
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import com.webinane.salam.domain.model.PrayerTimes
 import com.webinane.salam.ui.viewmodel.PrayerTimesViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun PrayerTimesScreen(
     viewModel: PrayerTimesViewModel = koinViewModel(),
+    onNavigateHome: () -> Unit,
     onNavigateNotifications: () -> Unit
 ) {
     val scrollState = rememberScrollState()
-    val prayerTiming by viewModel.prayerTiming.collectAsState()
+    val prayerTimes by viewModel.prayerTiming.collectAsState()
     val currentTime by viewModel.currentTime.collectAsState()
     val currentDate by viewModel.currentDate.collectAsState()
 
@@ -67,7 +69,7 @@ fun PrayerTimesScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        if (prayerTiming == null) {
+        if (prayerTimes == null) {
             Box(
                 modifier = Modifier.fillMaxSize()
                     .background(Color.White), // Keep white for loader
@@ -135,7 +137,7 @@ fun PrayerTimesScreen(
                         text = currentTime.ifEmpty { "00:00" },
                         fontSize = 36.ssp,
                         fontWeight = FontWeight.Bold,
-                        color = DarkBlueNavy
+                        color = LightBlueTeal
                     )
 
                     // Date
@@ -143,14 +145,14 @@ fun PrayerTimesScreen(
                         text = currentDate.ifEmpty { "Loading Date..." },
                         fontSize = 14.ssp,
                         fontWeight = FontWeight.Medium,
-                        color = DarkBlueNavy
+                        color = LightBlueTeal
                     )
                     // Hijri Date Placeholder
                     Text(
                         text = "11 Rajab 1447 AH", // Still hardcoded for now or fetch if available
                         fontSize = 14.ssp,
                         fontWeight = FontWeight.Medium,
-                        color = DarkBlueNavy
+                        color = LightBlueTeal
                     )
 
                     Spacer(modifier = Modifier.height(22.sdp))
@@ -191,7 +193,7 @@ fun PrayerTimesScreen(
                     Spacer(modifier = Modifier.height(6.sdp))
 
                     // Prayer Times List
-                    val data = prayerTiming!!
+                    val data = prayerTimes!!
                     
                     // Helper to convert 12h PM time to 24h (e.g. 1:44 -> 13:44)
                     fun to24Hour(time: String): String {
@@ -219,32 +221,32 @@ fun PrayerTimesScreen(
 
                     PrayerTimeRow(
                         name = "FAJR", 
-                        begin = data.fajrStart, 
-                        jamaat = data.fajrPrayer,
+                        begin = data.fajr.start, 
+                        jamaat = data.fajr.jamaat,
                         isHighlighted = currentPrayer == "FAJR"
                     )
                     PrayerTimeRow(
                         name = "DHUHR",
-                        begin = to24Hour(data.dhuhrStart),
-                        jamaat = to24Hour(data.dhuhrPrayer),
+                        begin = to24Hour(data.dhuhr.start),
+                        jamaat = to24Hour(data.dhuhr.jamaat),
                         isHighlighted = currentPrayer == "DHUHR"
                     )
                     PrayerTimeRow(
                         name = "ASR", 
-                        begin = to24Hour(data.asrStart), 
-                        jamaat = to24Hour(data.asrPrayer),
+                        begin = to24Hour(data.asr.start), 
+                        jamaat = to24Hour(data.asr.jamaat),
                         isHighlighted = currentPrayer == "ASR"
                     )
                     PrayerTimeRow(
                         name = "MAGHRIB",
-                        begin = to24Hour(data.maghribStart),
-                        jamaat = to24Hour(data.maghribPrayer),
+                        begin = to24Hour(data.maghrib.start),
+                        jamaat = to24Hour(data.maghrib.jamaat),
                         isHighlighted = currentPrayer == "MAGHRIB"
                     )
                     PrayerTimeRow(
                         name = "ISHA", 
-                        begin = to24Hour(data.ishaStart), 
-                        jamaat = to24Hour(data.ishaPrayer),
+                        begin = to24Hour(data.isha.start), 
+                        jamaat = to24Hour(data.isha.jamaat),
                         isHighlighted = currentPrayer == "ISHA"
                     )
 
@@ -264,14 +266,14 @@ fun PrayerTimesScreen(
                                 text = "SUNRISE",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 10.ssp,
-                                color = DarkBlueNavy
+                                color = LightBlueTeal
                             )
                             Spacer(modifier = Modifier.height(3.sdp))
                             Text(
-                                text = prayerTiming?.sunrise ?: "--:--",
+                                text = prayerTimes?.sunrise ?: "--:--",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 14.ssp,
-                                color = DarkBlueNavy
+                                color = LightBlueTeal
                             )
                         }
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -279,14 +281,14 @@ fun PrayerTimesScreen(
                                 text = "1 JUMUAH",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 10.ssp,
-                                color = DarkBlueNavy
+                                color = LightBlueTeal
                             )
                             Spacer(modifier = Modifier.height(3.sdp))
                             Text(
                                 text = "13:00",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 14.ssp,
-                                color = DarkBlueNavy
+                                color = LightBlueTeal
                             )
                         }
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -294,59 +296,20 @@ fun PrayerTimesScreen(
                                 text = "2 JUMUAH",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 10.ssp,
-                                color = DarkBlueNavy
+                                color = LightBlueTeal
                             )
                             Spacer(modifier = Modifier.height(3.sdp))
                             Text(
                                 text = "14:00",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 14.ssp,
-                                color = DarkBlueNavy
+                                color = LightBlueTeal
                             )
                         }
                     }
                     
                     // Add Spacer to push content up above the bottom bar
                     Spacer(modifier = Modifier.height(90.sdp))
-                }
-
-                // Bottom Navigation Bar
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .navigationBarsPadding()
-                        .fillMaxWidth()
-                        .height(60.sdp)
-                        .clip(RoundedCornerShape(topStart = 22.sdp, topEnd = 22.sdp))
-                        .background(LightBlueBackground)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                imageVector = Icons.Default.Home,
-                                contentDescription = "Home",
-                                tint = LightBlueTeal,
-                                modifier = Modifier.size(24.sdp)
-                            )
-                            Text("Home Menu", color = LightBlueTeal, fontSize = 9.ssp)
-                        }
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.clickable { onNavigateNotifications() }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Notifications,
-                                contentDescription = "Notification",
-                                tint = DarkBlueNavy,
-                                modifier = Modifier.size(24.sdp)
-                            )
-                            Text("Notification", color = DarkBlueNavy, fontSize = 9.ssp)
-                        }
-                    }
                 }
             }
         }
@@ -377,8 +340,8 @@ fun PrayerTimeRow(name: String, begin: String, jamaat: String, isHighlighted: Bo
                 Text(
                     text = name,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 10.ssp,
-                    color = if (isHighlighted) GreenText else DarkBlueNavy
+                    fontSize = 12.ssp,
+                    color = if (isHighlighted) LightBlueTeal else DarkBlueNavy
                 )
             }
         }
@@ -401,7 +364,7 @@ fun PrayerTimeRow(name: String, begin: String, jamaat: String, isHighlighted: Bo
                 text = begin,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 16.ssp,
-                color = if (isHighlighted) GreenText else DarkBlueNavy
+                color = if (isHighlighted) LightBlueTeal else DarkBlueNavy
             )
         }
 
@@ -423,7 +386,7 @@ fun PrayerTimeRow(name: String, begin: String, jamaat: String, isHighlighted: Bo
                 text = jamaat,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 16.ssp,
-                color = if (isHighlighted) GreenText else DarkBlueNavy
+                color = if (isHighlighted) LightBlueTeal else DarkBlueNavy
             )
         }
     }
