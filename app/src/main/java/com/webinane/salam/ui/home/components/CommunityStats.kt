@@ -9,6 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
+import com.webinane.salam.R
 import com.webinane.salam.ui.theme.DarkBlueNavy
 import com.webinane.salam.ui.theme.LightBlueTeal
 import ir.kaaveh.sdpcompose.sdp
@@ -18,7 +20,7 @@ import ir.kaaveh.sdpcompose.ssp
 fun CommunityStats() {
     Column(modifier = Modifier.padding(16.sdp)) {
         Text(
-            text = "Community Stats",
+            text = stringResource(R.string.community_stats_title),
             fontSize = 14.ssp,
             fontWeight = FontWeight.Bold,
             color = LightBlueTeal,
@@ -26,8 +28,8 @@ fun CommunityStats() {
         )
 
         Row(horizontalArrangement = Arrangement.spacedBy(10.sdp)) {
-            StatCard(modifier = Modifier.weight(1f), title = "1,247", subtitle = "Members", color = LightBlueTeal)
-            StatCard(modifier = Modifier.weight(1f), title = "43", subtitle = "Events", color = DarkBlueNavy)
+            StatCard(modifier = Modifier.weight(1f), title = "1,247", subtitle = stringResource(R.string.members), color = LightBlueTeal)
+            StatCard(modifier = Modifier.weight(1f), title = "43", subtitle = stringResource(R.string.events), color = DarkBlueNavy)
         }
     }
 }

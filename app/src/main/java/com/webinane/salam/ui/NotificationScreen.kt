@@ -15,10 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
@@ -33,6 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
+import com.webinane.salam.R
 import com.webinane.salam.data.local.NotificationPreference
 import com.webinane.salam.ui.theme.DarkBlueNavy
 import com.webinane.salam.ui.theme.LightBlueBackground
@@ -73,8 +71,8 @@ fun NotificationScreen(
 
                 ) {
                 Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Back",
+                    painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_arrow_back),
+                    contentDescription = stringResource(R.string.back),
                     tint = LightBlueTeal,
                     modifier = Modifier
                         .size(28.sdp)
@@ -82,7 +80,7 @@ fun NotificationScreen(
                 )
                 Spacer(modifier = Modifier.width(10.sdp))
                 Text(
-                    text = "Notification Screen",
+                    text = stringResource(R.string.notification_screen_title),
                     fontSize = 20.ssp,
                     fontWeight = FontWeight.Bold,
                     color = LightBlueTeal,
@@ -93,7 +91,7 @@ fun NotificationScreen(
             Spacer(modifier = Modifier.height(20.sdp))
 
             Text(
-                text = "Select Notification Sound",
+                text = stringResource(R.string.select_notification_sound),
                 fontSize = 16.ssp,
                 fontWeight = FontWeight.Bold,
                 color = LightBlueTeal,
@@ -171,21 +169,21 @@ fun NotificationScreen(
                     modifier = Modifier.clickable { onNavigateHome() }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Home,
-                        contentDescription = "Home",
+                        painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_home),
+                        contentDescription = stringResource(R.string.home_desc),
                         tint = LightBlueTeal,
                         modifier = Modifier.size(24.sdp)
                     )
-                    Text("Home Menu", color = LightBlueTeal, fontSize = 9.ssp)
+                    Text(stringResource(R.string.home_menu), color = LightBlueTeal, fontSize = 9.ssp)
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
-                        imageVector = Icons.Default.Notifications,
-                        contentDescription = "Notification",
+                        painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_notifications),
+                        contentDescription = stringResource(R.string.notification_nav),
                         tint = LightBlueTeal,
                         modifier = Modifier.size(24.sdp)
                     )
-                    Text("Notification", color = LightBlueTeal, fontSize = 9.ssp)
+                    Text(stringResource(R.string.notification_nav), color = LightBlueTeal, fontSize = 9.ssp)
                 }
             }
         }

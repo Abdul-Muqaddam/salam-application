@@ -4,9 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
+import com.webinane.salam.R
 import com.webinane.salam.ui.theme.DarkBlueNavy
 import com.webinane.salam.ui.theme.LightBlueTeal
 import ir.kaaveh.sdpcompose.sdp
@@ -54,7 +53,7 @@ fun HomeHeader(currentTime: String, currentDate: String, onNavigateNotifications
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Place, // Approximating mosque icon
+                            painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_place),
                             contentDescription = null,
                             tint = Color.White,
                             modifier = Modifier.size(20.sdp)
@@ -63,13 +62,13 @@ fun HomeHeader(currentTime: String, currentDate: String, onNavigateNotifications
                     Spacer(modifier = Modifier.width(12.sdp))
                     Column {
                         Text(
-                            text = "Salam",
+                            text = "Salam", // Keep name as is or move to app_name? User didn't specify but it's likely a brand name. I'll keep it for now as it matches "مسجد سلام" in essence (brand name).
                             fontSize = 15.ssp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )
                         Text(
-                            text = "Islamic Prayer Times",
+                            text = stringResource(R.string.islamic_prayer_times),
                             fontSize = 10.ssp,
                             color = Color.White.copy(alpha = 0.8f)
                         )
@@ -84,8 +83,8 @@ fun HomeHeader(currentTime: String, currentDate: String, onNavigateNotifications
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Notifications,
-                        contentDescription = "Notifications",
+                        painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_notifications),
+                        contentDescription = stringResource(R.string.notifications_desc),
                         tint = Color.White,
                         modifier = Modifier.size(20.sdp)
                     )
@@ -106,12 +105,12 @@ fun HomeHeader(currentTime: String, currentDate: String, onNavigateNotifications
                     color = Color.White
                 )
                 Text(
-                    text = currentDate.ifEmpty { "Loading..." },
+                    text = currentDate.ifEmpty { stringResource(R.string.loading) },
                     fontSize = 12.ssp,
                     color = Color.White.copy(alpha = 0.8f)
                 )
                 Text(
-                    text = "19 Rajab 1446", // Placeholder or calculate
+                    text = stringResource(R.string.hijri_date_placeholder), // Placeholder
                     fontSize = 12.ssp,
                     color = Color.White.copy(alpha = 0.7f),
                     modifier = Modifier.padding(top = 4.sdp)

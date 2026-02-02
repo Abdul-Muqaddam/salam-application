@@ -15,6 +15,8 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(
     onNavigatePrayerTimes: () -> Unit,
     onNavigateNotifications: () -> Unit,
+    onNavigateZakat: () -> Unit,
+    onNavigateQibla: () -> Unit = {},
     viewModel: PrayerTimesViewModel = koinViewModel()
 ) {
     val prayerTiming by viewModel.prayerTiming.collectAsState()
@@ -66,7 +68,10 @@ fun HomeScreen(
             }
 
             item {
-                QuickActions()
+                QuickActions(
+                    onNavigateZakat = onNavigateZakat,
+                    onNavigateQibla = onNavigateQibla
+                )
             }
 
             item {

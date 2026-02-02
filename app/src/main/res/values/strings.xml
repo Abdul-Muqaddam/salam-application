@@ -1,3 +1,87 @@
 <resources>
     <string name="app_name">Salam</string>
+    
+    <!-- CurrentPrayerCard -->
+    <string name="next_prayer">Next Prayer</string>
+    <string name="today">Today</string>
+    <string name="jamaat_label">Jamaat: %1$s</string>
+    <string name="time_remaining">Time Remaining</string>
+    <string name="hours_minutes_seconds">Hours : Minutes : Seconds</string>
+    <string name="see_all_timings">See All Timings</string>
+
+    <!-- HomeHeader -->
+    <string name="islamic_prayer_times">Islamic Prayer Times</string>
+    <string name="notifications_desc">Notifications</string>
+    <string name="loading">Loading...</string>
+    <string name="hijri_date_placeholder">19 Rajab 1446</string>
+
+    <!-- NotificationScreen -->
+    <string name="notification_screen_title">Notification Screen</string>
+    <string name="select_notification_sound">Select Notification Sound</string>
+    <string name="preview_title">Preview: %1$s</string>
+    <string name="preview_message">This is a preview of the %1$s sound.</string>
+    <string name="home_menu">Home Menu</string>
+    <string name="notification_nav">Notification</string>
+    <string name="back">Back</string>
+    <string name="home_desc">Home</string>
+
+    <!-- PrayerTimesScreen -->
+    <string name="loading_date">Loading Date...</string>
+    <string name="hijri_date_full_placeholder">11 Rajab 1447 AH</string>
+    <string name="header_prayer">PRAYER</string>
+    <string name="header_beginning">BEGINNING</string>
+    <string name="header_jamaat">JAMAAT</string>
+    <string name="prayer_fajr">FAJR</string>
+    <string name="prayer_dhuhr">DHUHR</string>
+    <string name="prayer_asr">ASR</string>
+    <string name="prayer_maghrib">MAGHRIB</string>
+    <string name="prayer_isha">ISHA</string>
+    <string name="sunrise_label">SUNRISE</string>
+    <string name="jumuah_1">1 JUMUAH</string>
+    <string name="jumuah_2">2 JUMUAH</string>
+    <string name="logo_desc">Logo</string>
+
+    <!-- IslamicCalendar -->
+    <string name="islamic_calendar_title">Islamic Calendar</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+
+    <!-- DhikrCounter -->
+    <string name="daily_dhikr_counter">Daily Dhikr Counter</string>
+    <string name="set_custom_target">Set Custom Target</string>
+    <string name="enter_target">Enter target</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="reset_count">Reset Count</string>
+    <string name="of_label">of %1$d</string>
+    <string name="tap_to_count">Tap to Count</string>
+    <string name="custom_count_desc">Custom Count</string>
+
+    <!-- PrayerList -->
+    <string name="prayer_times_title">Prayer Times</string>
+    <string name="see_full_schedule">See Full Schedule</string>
+    <string name="jamaat_time">Jamaat Time</string>
+
+    <!-- MosqueInfo -->
+    <string name="nearby_mosque">Nearby Mosque</string>
+    <string name="mosque_name_placeholder">Masjid Al-Noor</string>
+    <string name="mosque_location_placeholder">0.8 km • New York, NY</string>
+    <string name="mosque_reviews_placeholder"> 4.8 (120 reviews)</string>
+
+    <!-- Announcements -->
+    <string name="announcements_title">Announcements</string>
+    <string name="view_all">View All</string>
+    <string name="jummah_announcement_title">Jummah Prayer Time</string>
+    <string name="jummah_announcement_desc">Special sermon starts at 1:30 PM this Friday.</string>
+
+    <!-- CommunityStats -->
+    <string name="community_stats_title">Community Stats</string>
+    <string name="members">Members</string>
+    <string name="events">Events</string>
+
+    <!-- QuickActions -->
+    <string name="qibla_title">Qibla</string>
+    <string name="qibla_subtitle">Compass</string>
+    <string name="zakat_title">Zakat</string>
+    <string name="zakat_subtitle">Calculator</string>
 </resources>

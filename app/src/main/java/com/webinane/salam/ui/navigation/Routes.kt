@@ -11,4 +11,10 @@ object Routes {
 
     @Serializable
     object PrayerTimes
+
+    @Serializable
+    object ZakatCalculator
+    
+    @Serializable
+    object QiblaFinder
 }

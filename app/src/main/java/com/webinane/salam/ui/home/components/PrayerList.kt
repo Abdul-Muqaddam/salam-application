@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.webinane.salam.R
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,13 +40,13 @@ fun PrayerList(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Prayer Times",
+                text = stringResource(R.string.prayer_times_title),
                 fontSize = 14.ssp,
                 fontWeight = FontWeight.Bold,
                 color = LightBlueTeal
             )
             TextButton(onClick = onSeeAll) {
-                Text(text = "See Full Schedule", fontSize = 10.ssp, color = LightBlueTeal)
+                Text(text = stringResource(R.string.see_full_schedule), fontSize = 10.ssp, color = LightBlueTeal)
             }
         }
 
@@ -129,7 +130,7 @@ fun PrayerItem(name: String, time: String, isHighlighted: Boolean) {
                         fontWeight = FontWeight.Bold,
                         color = DarkBlueNavy
                     )
-                    Text(text = "Jamaat Time", fontSize = 9.ssp, color = Color.Gray)
+                    Text(text = stringResource(R.string.jamaat_time), fontSize = 9.ssp, color = Color.Gray)
                 }
             }
             Text(

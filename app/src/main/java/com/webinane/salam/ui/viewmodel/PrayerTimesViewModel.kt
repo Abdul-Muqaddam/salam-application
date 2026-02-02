@@ -58,7 +58,7 @@ class PrayerTimesViewModel(
     }
 
     private fun observePrayerData() {
-        val dateFormat = SimpleDateFormat("dd-MMM", Locale.US)
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
         // Observe Today
         viewModelScope.launch {
@@ -82,6 +82,16 @@ class PrayerTimesViewModel(
                 if (data != null) {
                     tomorrowData = data
                     checkAndSwitchData(Date())
+                }
+            }
+        }
+
+        // Fresh Start: Schedule all available data to ensure alarms are active
+        viewModelScope.launch {
+            getPrayerTimesUseCase.observeAll().collect { list ->
+                if (list.isNotEmpty()) {
+                    Log.d("PrayerTimesViewModel", "Refreshing alarms for ${list.size} days on startup")
+                    alarmScheduler.schedule(list)
                 }
             }
         }

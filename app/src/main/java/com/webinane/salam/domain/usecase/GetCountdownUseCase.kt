@@ -29,19 +29,26 @@ class GetCountdownUseCase {
 
         // List of events to check
         val events = listOf(
-            to24Hour(data.fajr.start),
-            to24Hour(data.fajr.jamaat),
-            to24Hour(data.dhuhr.start),
-            to24Hour(data.dhuhr.jamaat),
-            to24Hour(data.asr.start),
-            to24Hour(data.asr.jamaat),
-            to24Hour(data.maghrib.start),
-            to24Hour(data.maghrib.jamaat),
-            to24Hour(data.isha.start),
-            to24Hour(data.isha.jamaat)
-        ).map { 
-            val parts = it.split(":")
-            parts[0].toInt() * 3600 + parts[1].toInt() * 60
+            "Fajr" to data.fajr.start,
+            "Fajr" to data.fajr.jamaat,
+            "Dhuhr" to data.dhuhr.start,
+            "Dhuhr" to data.dhuhr.jamaat,
+            "Asr" to data.asr.start,
+            "Asr" to data.asr.jamaat,
+            "Maghrib" to data.maghrib.start,
+            "Maghrib" to data.maghrib.jamaat,
+            "Isha" to data.isha.start,
+            "Isha" to data.isha.jamaat
+        ).map { (name, time) -> 
+            val parts = time.trim().split(":")
+            var hour = parts[0].toInt()
+            val minute = parts[1].toInt()
+            
+            when (name) {
+                "Dhuhr" -> if (hour in 1..6) hour += 12
+                "Asr", "Maghrib", "Isha" -> if (hour < 12) hour += 12
+            }
+            hour * 3600 + minute * 60
         }.sorted()
 
         // Find the next event
@@ -56,8 +63,8 @@ class GetCountdownUseCase {
         } else {
             // All passed for today, wait for tomorrow's Fajr
             tomorrow?.let { tom ->
-                val fajrTomorrow = to24Hour(tom.fajr.start)
-                val parts = fajrTomorrow.split(":")
+                // Direct parsing for Fajr as it's always AM
+                val parts = tom.fajr.start.trim().split(":")
                 val tomorrowFajrSeconds = parts[0].toInt() * 3600 + parts[1].toInt() * 60
                 
                 val diff = (24 * 3600 - currentTotalSeconds) + tomorrowFajrSeconds

@@ -5,5 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface PrayerRepository {
     fun observePrayerForDate(date: String): Flow<PrayerTimes?>
+    fun observeAllPrayerTimings(): Flow<List<PrayerTimes>>
     suspend fun syncPrayerTimes()
 }

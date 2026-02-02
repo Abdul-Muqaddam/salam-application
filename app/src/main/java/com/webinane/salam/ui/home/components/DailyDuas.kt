@@ -3,8 +3,6 @@ package com.webinane.salam.ui.home.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -47,12 +45,12 @@ fun DailyDuas(
         ) {
             Column(modifier = Modifier.padding(16.sdp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(imageVector = Icons.Default.Star, contentDescription = null, tint = LightBlueTeal, modifier = Modifier.size(20.sdp))
+                    Icon(painter = painterResource(id = R.drawable.ic_star), contentDescription = null, tint = LightBlueTeal, modifier = Modifier.size(20.sdp))
                     Spacer(modifier = Modifier.width(8.sdp))
                     Text(text = "Morning Dua", fontSize = 12.ssp, fontWeight = FontWeight.Bold)
                 }
                 Spacer(modifier = Modifier.height(8.sdp))
-                Box(modifier = Modifier.fillMaxWidth().background(Color(0xFFF8F9FA), RoundedCornerShape(8.sdp)).padding(12.sdp)) {
+                Box(modifier = Modifier.fillMaxWidth().background(LightBlueTeal.copy(alpha = 0.05f), RoundedCornerShape(8.sdp)).padding(12.sdp)) {
                     Text(
                         text = duaText,
                         fontSize = 18.ssp,

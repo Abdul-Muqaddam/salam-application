@@ -4,16 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
+import com.webinane.salam.R
 import com.webinane.salam.ui.theme.DarkBlueNavy
 import com.webinane.salam.ui.theme.LightBlueTeal
 import ir.kaaveh.sdpcompose.sdp
@@ -58,7 +58,7 @@ fun CurrentPrayerCard(
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
-                                imageVector = Icons.Default.DateRange,
+                                painter = painterResource(id = R.drawable.ic_calendar),
                                 contentDescription = null,
                                 tint = LightBlueTeal,
                                 modifier = Modifier.size(16.sdp)
@@ -66,18 +66,18 @@ fun CurrentPrayerCard(
                         }
                         Spacer(modifier = Modifier.width(8.sdp))
                         Text(
-                            text = "Next Prayer",
+                            text = stringResource(R.string.next_prayer),
                             fontSize = 12.ssp,
                             fontWeight = FontWeight.Medium,
                             color = Color.Gray
                         )
                     }
                     Text(
-                        text = "Today",
+                        text = stringResource(R.string.today),
                         fontSize = 10.ssp,
                         color = Color.Gray,
                         modifier = Modifier
-                            .background(Color(0xFFF1F3F5), RoundedCornerShape(12.sdp))
+                            .background(LightBlueTeal.copy(alpha = 0.1f), RoundedCornerShape(12.sdp))
                             .padding(horizontal = 8.sdp, vertical = 4.sdp)
                     )
                 }
@@ -99,7 +99,7 @@ fun CurrentPrayerCard(
                 )
                 
                 Text(
-                    text = "Jamaat: $jamaat",
+                    text = stringResource(R.string.jamaat_label, jamaat),
                     fontSize = 12.ssp,
                     color = Color.Gray
                 )
@@ -124,14 +124,14 @@ fun CurrentPrayerCard(
                     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
                             Icon(
-                                imageVector = Icons.Default.Close, // Use a clock icon if available, for now using Star as a placeholder or search for clock
+                                painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_clock),
                                 contentDescription = null,
                                 tint = LightBlueTeal,
                                 modifier = Modifier.size(14.sdp)
                             )
                             Spacer(modifier = Modifier.width(6.sdp))
                             Text(
-                                text = "Time Remaining",
+                                text = stringResource(R.string.time_remaining),
                                 fontSize = 11.ssp,
                                 color = Color.Gray,
                                 fontWeight = FontWeight.Medium
@@ -145,7 +145,7 @@ fun CurrentPrayerCard(
                             color = LightBlueTeal
                         )
                         Text(
-                            text = "Hours : Minutes : Seconds",
+                            text = stringResource(R.string.hours_minutes_seconds),
                             fontSize = 9.ssp,
                             color = Color.Gray.copy(alpha = 0.8f)
                         )
@@ -160,7 +160,7 @@ fun CurrentPrayerCard(
                     shape = RoundedCornerShape(12.sdp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("See All Timings", fontSize = 12.ssp)
+                    Text(stringResource(R.string.see_all_timings), fontSize = 12.ssp)
                 }
             }
         }

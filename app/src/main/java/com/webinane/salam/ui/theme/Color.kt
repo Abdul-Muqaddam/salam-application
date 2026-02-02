@@ -10,9 +10,12 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
-// Prayer Times Screen Colors
-val LightBlueTeal = Color(0xFF4ea9ba)
-val DarkBlueNavy = Color(0xFF003865)
+// Custom Theme Colors
+val DarkBlueNavy = Color(0xFF003366)
+val LightBlueTeal = Color(0xFF399AAB)
+
+// Semantic Colors
+val SuccessGreen = Color(0xFF86EFAC)  // Green-300 for success states
 val LightBlueBackground = Color(0xFFEBF8FC)
 val LightBlueHighlight = Color(0xFFBCE6F3)
 val LightBlueRow = Color(0xFFD3EEF8)

@@ -10,12 +10,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import com.webinane.salam.R
 import com.webinane.salam.ui.theme.DarkBlueNavy
 import com.webinane.salam.ui.theme.LightBlueTeal
 import ir.kaaveh.sdpcompose.sdp
@@ -24,9 +25,8 @@ import org.koin.androidx.compose.koinViewModel
 import com.webinane.salam.ui.viewmodel.DhikrViewModel
 
 @Composable
-fun DhikrCounter(
-    viewModel: DhikrViewModel = koinViewModel()
-) {
+fun DhikrCounter() {
+    val viewModel: DhikrViewModel = koinViewModel()
     val count by viewModel.count.collectAsState()
     val totalCount by viewModel.totalCount.collectAsState()
     
@@ -41,7 +41,7 @@ fun DhikrCounter(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Daily Dhikr Counter",
+                text = stringResource(R.string.daily_dhikr_counter),
                 fontSize = 14.ssp,
                 fontWeight = FontWeight.Bold,
                 color = LightBlueTeal
@@ -81,8 +81,8 @@ fun DhikrCounter(
                     modifier = Modifier.size(24.sdp)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = "Custom Count",
+                        painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_edit),
+                        contentDescription = stringResource(R.string.custom_count_desc),
                         tint = LightBlueTeal,
                         modifier = Modifier.size(14.sdp)
                     )
@@ -94,12 +94,12 @@ fun DhikrCounter(
         if (showDialog) {
             AlertDialog(
                 onDismissRequest = { showDialog = false },
-                title = { Text("Set Custom Target", fontSize = 16.ssp) },
+                title = { Text(stringResource(R.string.set_custom_target), fontSize = 16.ssp) },
                 text = {
                     OutlinedTextField(
                         value = customInput,
                         onValueChange = { if (it.length <= 4) customInput = it.filter { char -> char.isDigit() } },
-                        label = { Text("Enter target") },
+                        label = { Text(stringResource(R.string.enter_target)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
@@ -113,12 +113,12 @@ fun DhikrCounter(
                         }
                         showDialog = false
                     }) {
-                        Text("Save", color = LightBlueTeal)
+                        Text(stringResource(R.string.save), color = LightBlueTeal)
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { showDialog = false }) {
-                        Text("Cancel", color = Color.Gray)
+                        Text(stringResource(R.string.cancel), color = Color.Gray)
                     }
                 },
                 containerColor = Color.White,
@@ -146,8 +146,8 @@ fun DhikrCounter(
                         modifier = Modifier.size(28.sdp)
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Refresh,
-                            contentDescription = "Reset Count",
+                            painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_refresh),
+                            contentDescription = stringResource(R.string.reset_count),
                             tint = Color.White.copy(alpha = 0.6f),
                             modifier = Modifier.size(16.sdp)
                         )
@@ -156,7 +156,7 @@ fun DhikrCounter(
 
                 Text(text = "SubhanAllah", color = Color.White.copy(alpha = 0.9f), fontSize = 12.ssp)
                 Text(text = "$count", color = Color.White, fontSize = 48.ssp, fontWeight = FontWeight.Bold)
-                Text(text = "of $totalCount", color = Color.White.copy(alpha = 0.7f), fontSize = 10.ssp)
+                Text(text = stringResource(R.string.of_label, totalCount), color = Color.White.copy(alpha = 0.7f), fontSize = 10.ssp)
 
                 Spacer(modifier = Modifier.height(16.sdp))
 
@@ -184,7 +184,7 @@ fun DhikrCounter(
                     colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                     shape = RoundedCornerShape(12.sdp)
                 ) {
-                    Text(text = "Tap to Count", color = DarkBlueNavy, fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(R.string.tap_to_count), color = DarkBlueNavy, fontWeight = FontWeight.Bold)
                 }
             }
         }

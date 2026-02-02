@@ -10,4 +10,8 @@ class GetPrayerTimesUseCase(
     operator fun invoke(date: String): Flow<PrayerTimes?> {
         return repository.observePrayerForDate(date)
     }
+
+    fun observeAll(): Flow<List<PrayerTimes>> {
+        return repository.observeAllPrayerTimings()
+    }
 }

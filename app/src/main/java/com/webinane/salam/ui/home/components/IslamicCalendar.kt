@@ -4,9 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
+import com.webinane.salam.R
 import com.webinane.salam.ui.theme.LightBlueTeal
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -28,14 +27,13 @@ import org.koin.androidx.compose.koinViewModel
 import com.webinane.salam.ui.viewmodel.IslamicCalendarViewModel
 
 @Composable
-fun IslamicCalendar(
-    viewModel: IslamicCalendarViewModel = koinViewModel()
-) {
+fun IslamicCalendar() {
+    val viewModel: IslamicCalendarViewModel = koinViewModel()
     val state by viewModel.state.collectAsState()
     
     Column(modifier = Modifier.padding(16.sdp)) {
         Text(
-            text = "Islamic Calendar",
+            text = stringResource(R.string.islamic_calendar_title),
             fontSize = 14.ssp,
             fontWeight = FontWeight.Bold,
             color = LightBlueTeal,
@@ -55,14 +53,14 @@ fun IslamicCalendar(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(onClick = { viewModel.previousMonth() }) {
-                        Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Previous", tint = LightBlueTeal)
+                        Icon(painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_chevron_left), contentDescription = stringResource(R.string.previous), tint = LightBlueTeal)
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(text = "${state.currentHijriMonth} ${state.hijriYear}", fontSize = 12.ssp, fontWeight = FontWeight.Bold, color = LightBlueTeal)
+                        Text(text = "${state.displayHijriMonth} ${state.hijriYear}", fontSize = 12.ssp, fontWeight = FontWeight.Bold, color = LightBlueTeal)
                         Text(text = state.currentGregorianMonth, fontSize = 10.ssp, color = Color.Gray)
                     }
                     IconButton(onClick = { viewModel.nextMonth() }) {
-                        Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = "Next", tint = LightBlueTeal)
+                        Icon(painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_chevron_right), contentDescription = stringResource(R.string.next), tint = LightBlueTeal)
                     }
                 }
                 
@@ -96,38 +94,37 @@ fun IslamicCalendar(
                             Box(
                                 modifier = Modifier
                                     .weight(1f)
-                                    .aspectRatio(1f)
+                                    .aspectRatio(0.8f)
                                     .padding(2.sdp)
-                                    .clip(CircleShape)
                                     .background(
                                         if (isToday) LightBlueTeal 
-                                        else Color.Transparent
+                                        else Color.Transparent,
+                                        RoundedCornerShape(8.sdp)
                                     ),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Column(
-                                    modifier = Modifier.height(100.sdp),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Center
+                                    horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Text(
                                         text = day.dayOfMonth.toString(),
-                                        fontSize = 11.ssp,
+                                        fontSize = 12.ssp,
                                         fontWeight = if (isToday) FontWeight.Bold else FontWeight.SemiBold,
                                         color = when {
                                             isToday -> Color.White
                                             isCurrentMonth -> Color.Black
-                                            else -> Color.Gray.copy(alpha = 0.4f)
+                                            else -> Color.Gray.copy(alpha = 0.6f)
                                         }
                                     )
                                     Text(
-                                        text = day.hijriDay.toString(),
-                                        fontSize = 8.ssp,
-                                        fontWeight = if (isToday) FontWeight.Bold else FontWeight.Normal,
+                                        text = if (day.hijriDay == 1) "${day.hijriDay} ${day.hijriMonthName.take(3)}" else day.hijriDay.toString(),
+                                        fontSize = 9.ssp,
+                                        fontWeight = if (isToday || day.hijriDay == 1) FontWeight.Bold else FontWeight.Normal,
                                         color = when {
                                             isToday -> Color.White.copy(alpha = 0.9f)
+                                            day.hijriDay == 1 -> LightBlueTeal.copy(alpha = 0.9f)
                                             isCurrentMonth -> LightBlueTeal
-                                            else -> LightBlueTeal.copy(alpha = 0.3f)
+                                            else -> LightBlueTeal.copy(alpha = 0.7f)
                                         }
                                     )
                                 }

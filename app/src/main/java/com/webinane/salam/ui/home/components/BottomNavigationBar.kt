@@ -3,10 +3,7 @@ package com.webinane.salam.ui.home.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Notifications
+import com.webinane.salam.R
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,16 +28,16 @@ fun BottomNavigationBar(onNavigateNotifications: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            BottomNavItem(icon = Icons.Default.Home, label = "Home", isSelected = true)
-            BottomNavItem(icon = Icons.Default.Notifications, label = "Alerts", onClick = onNavigateNotifications)
-            BottomNavItem(icon = Icons.Default.Menu, label = "More")
+            BottomNavItem(iconRes = R.drawable.ic_home, label = "Home", isSelected = true)
+            BottomNavItem(iconRes = R.drawable.ic_notifications, label = "Alerts", onClick = onNavigateNotifications)
+            BottomNavItem(iconRes = R.drawable.ic_menu, label = "More")
         }
     }
 }
 
 @Composable
 fun BottomNavItem(
-    icon: ImageVector,
+    iconRes: Int,
     label: String,
     isSelected: Boolean = false,
     onClick: () -> Unit = {}
@@ -50,7 +47,7 @@ fun BottomNavItem(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
-            imageVector = icon,
+            painter = androidx.compose.ui.res.painterResource(id = iconRes),
             contentDescription = label,
             tint = if (isSelected) LightBlueTeal else Color.Gray,
             modifier = Modifier.size(24.sdp)

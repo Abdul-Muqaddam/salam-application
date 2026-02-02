@@ -22,11 +22,15 @@ class PrayerRepositoryImpl(
         return prayerDao.observePrayerForDate(date).map { it?.toDomain() }
     }
 
+    override fun observeAllPrayerTimings(): Flow<List<PrayerTimes>> {
+        return prayerDao.getAllPrayerTimings().map { list -> list.map { it.toDomain() } }
+    }
+
     override suspend fun syncPrayerTimes() {
         Log.d("PrayerRepository", "Starting sync")
         try {
             val calendar = Calendar.getInstance()
-            val dateFormat = SimpleDateFormat("dd-MMM", Locale.US)
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
             val monthMap = mapOf(
                 "Jan" to "01_Jan", "Feb" to "02_Feb", "Mar" to "03_Mar",
                 "Apr" to "04_Apr", "May" to "05_May", "Jun" to "06_Jun",
@@ -36,16 +40,18 @@ class PrayerRepositoryImpl(
 
             val database = FirebaseDatabase.getInstance()
             val timingsToSave = mutableListOf<PrayerTiming>()
+            val firebaseDateFormat = SimpleDateFormat("dd-MMM", Locale.US)
 
             for (i in 0 until 30) {
                 val date = calendar.time
-                val dateStr = dateFormat.format(date)
-                val parts = dateStr.split("-")
+                val dateStr = dateFormat.format(date) // yyyy-MM-dd
+                val firebaseDateStr = firebaseDateFormat.format(date) // dd-MMM
+                val parts = firebaseDateStr.split("-")
                 
                 if (parts.size >= 2) {
                     val monthShort = parts[1]
                     val monthKey = monthMap[monthShort]
-                    val dateKey = dateStr.replace("-", "_")
+                    val dateKey = firebaseDateStr.replace("-", "_") // dd_MMM
                     
                     if (monthKey != null) {
                         val path = "prayer_times/$monthKey/$dateKey"
@@ -53,11 +59,7 @@ class PrayerRepositoryImpl(
                         val timing = snapshot.getValue(PrayerTiming::class.java)
                         
                         if (timing != null) {
-                            val finalTiming = if (timing.gregorianDate.isEmpty()) {
-                                timing.copy(gregorianDate = dateStr)
-                            } else {
-                                timing
-                            }
+                            val finalTiming = timing.copy(gregorianDate = dateStr)
                             timingsToSave.add(finalTiming)
                         }
                     }

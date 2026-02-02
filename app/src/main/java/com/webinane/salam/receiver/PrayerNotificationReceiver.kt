@@ -23,6 +23,8 @@ class PrayerNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val prayerName = intent.getStringExtra("PRAYER_NAME") ?: "Prayer"
         val type = intent.getStringExtra("TYPE") ?: "Time"
+        
+        android.util.Log.d("NotificationReceiver", "ALARM TRIGGERED: Received $prayerName ($type)")
 
         val preference = NotificationPreference(context)
         val soundOption = preference.getSoundOption()
@@ -37,10 +39,11 @@ class PrayerNotificationReceiver : BroadcastReceiver() {
             message = "It's time for $prayerName ($type)",
             soundOption = soundOption
         )
+        android.util.Log.d("NotificationReceiver", "NOTIFICATION SHOWN: $prayerName ($type)")
 
         // Self-healing: Check if we have enough data left
         CoroutineScope(Dispatchers.IO).launch {
-            val dateFormat = SimpleDateFormat("dd-MMM", Locale.US)
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
             val todayStr = dateFormat.format(Date())
             val count = prayerDao.getRemainingDaysCount(todayStr)
             

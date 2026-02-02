@@ -13,12 +13,13 @@ import java.util.Locale
 data class CalendarDay(
     val dayOfMonth: Int,
     val hijriDay: Int,
+    val hijriMonthName: String,
     val isCurrentMonth: Boolean,
     val isToday: Boolean = false
 )
 
 data class CalendarState(
-    val currentHijriMonth: String,
+    val displayHijriMonth: String,
     val currentGregorianMonth: String,
     val days: List<CalendarDay>,
     val hijriYear: Int
@@ -49,29 +50,32 @@ class IslamicCalendarViewModel : ViewModel() {
         val firstDayOfMonth = date.withDayOfMonth(1)
         val lastDayOfMonth = date.withDayOfMonth(date.lengthOfMonth())
         
-        val hijrahDate = HijrahDate.from(firstDayOfMonth)
-        val hijriMonthName = getHijriMonthName(hijrahDate.get(java.time.temporal.ChronoField.MONTH_OF_YEAR))
-        val hijriYear = hijrahDate.get(java.time.temporal.ChronoField.YEAR)
-        
-        val gregorianMonthName = firstDayOfMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale.getDefault()))
-        
         val days = mutableListOf<CalendarDay>()
         
         // Add padding for start of month
         val firstDayOfWeek = firstDayOfMonth.dayOfWeek.value % 7 // 0 for Sunday
-        val prevMonth = firstDayOfMonth.minusMonths(1)
-        val prevMonthLen = prevMonth.lengthOfMonth()
         for (i in firstDayOfWeek - 1 downTo 0) {
             val d = firstDayOfMonth.minusDays((i + 1).toLong())
             val h = HijrahDate.from(d)
-            days.add(CalendarDay(d.dayOfMonth, h.get(java.time.temporal.ChronoField.DAY_OF_MONTH), false))
+            days.add(CalendarDay(
+                d.dayOfMonth, 
+                h.get(java.time.temporal.ChronoField.DAY_OF_MONTH), 
+                getHijriMonthName(h.get(java.time.temporal.ChronoField.MONTH_OF_YEAR)),
+                false
+            ))
         }
 
         val today = LocalDate.now()
         for (i in 1..date.lengthOfMonth()) {
             val d = firstDayOfMonth.plusDays((i - 1).toLong())
             val h = HijrahDate.from(d)
-            days.add(CalendarDay(i, h.get(java.time.temporal.ChronoField.DAY_OF_MONTH), true, d == today))
+            days.add(CalendarDay(
+                i, 
+                h.get(java.time.temporal.ChronoField.DAY_OF_MONTH), 
+                getHijriMonthName(h.get(java.time.temporal.ChronoField.MONTH_OF_YEAR)),
+                true, 
+                d == today
+            ))
         }
         
         // Add padding for end of month
@@ -79,11 +83,29 @@ class IslamicCalendarViewModel : ViewModel() {
         for (i in 1..remaining) {
             val d = lastDayOfMonth.plusDays(i.toLong())
             val h = HijrahDate.from(d)
-            days.add(CalendarDay(d.dayOfMonth, h.get(java.time.temporal.ChronoField.DAY_OF_MONTH), false))
+            days.add(CalendarDay(
+                d.dayOfMonth, 
+                h.get(java.time.temporal.ChronoField.DAY_OF_MONTH), 
+                getHijriMonthName(h.get(java.time.temporal.ChronoField.MONTH_OF_YEAR)),
+                false
+            ))
         }
 
+        val gregorianMonthName = firstDayOfMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale.getDefault()))
+        
+        // Determine display Hijri month name (could be one or two)
+        val monthNames = days.filter { it.isCurrentMonth }.map { it.hijriMonthName }.distinct()
+        val displayHijriMonth = if (monthNames.size > 1) {
+            "${monthNames[0]} / ${monthNames[1]}"
+        } else {
+            monthNames.firstOrNull() ?: ""
+        }
+        
+        val firstVisibleHijriDate = HijrahDate.from(firstDayOfMonth)
+        val hijriYear = firstVisibleHijriDate.get(java.time.temporal.ChronoField.YEAR)
+
         return CalendarState(
-            currentHijriMonth = hijriMonthName,
+            displayHijriMonth = displayHijriMonth,
             currentGregorianMonth = gregorianMonthName,
             days = days,
             hijriYear = hijriYear

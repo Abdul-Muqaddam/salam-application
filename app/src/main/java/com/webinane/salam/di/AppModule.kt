@@ -10,9 +10,11 @@ import com.webinane.salam.domain.usecase.GetPrayerTimesUseCase
 import com.webinane.salam.domain.usecase.GetCountdownUseCase
 import com.webinane.salam.domain.usecase.GetHighlightUseCase
 import com.webinane.salam.domain.usecase.SyncPrayerTimesUseCase
+import com.webinane.salam.ui.viewmodel.ZakatViewModel
 import com.webinane.salam.ui.viewmodel.PrayerTimesViewModel
 import com.webinane.salam.ui.viewmodel.DhikrViewModel
 import com.webinane.salam.ui.viewmodel.IslamicCalendarViewModel
+import com.webinane.salam.ui.viewmodel.QiblaViewModel
 import com.webinane.salam.util.TtsManager
 import com.webinane.salam.worker.PrayerSyncWorker
 import org.koin.android.ext.koin.androidContext
@@ -44,7 +46,12 @@ val appModule = module {
     single { WorkManager.getInstance(androidContext()) }
     workerOf(::PrayerSyncWorker)
     
+    // Metal Price Service
+    single { com.webinane.salam.data.remote.MetalPriceService() }
+    
     viewModelOf(::PrayerTimesViewModel)
     viewModelOf(::DhikrViewModel)
     viewModelOf(::IslamicCalendarViewModel)
+    viewModelOf(::ZakatViewModel)
+    viewModelOf(::QiblaViewModel)
 }

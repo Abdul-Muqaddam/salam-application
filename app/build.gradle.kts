@@ -19,6 +19,16 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+        // Load API key from local.properties
+        val properties = org.jetbrains.kotlin.konan.properties.Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            localPropertiesFile.inputStream().use { properties.load(it) }
+        }
+        
+        // Add API key to BuildConfig (use empty string as fallback)
+        buildConfigField("String", "METAL_API_KEY", "\"${properties.getProperty("METAL_API_KEY", "")}\"")
     }
 
     buildTypes {
@@ -39,6 +49,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true  // Enable BuildConfig generation
     }
 }
 
@@ -55,7 +66,9 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.koin.androidx.compose)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.play.services.location)
     
     // Room
     implementation(libs.androidx.room.runtime)

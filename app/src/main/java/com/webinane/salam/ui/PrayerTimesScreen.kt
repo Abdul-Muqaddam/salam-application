@@ -30,9 +30,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import ir.kaaveh.sdpcompose.sdp
@@ -57,6 +60,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun PrayerTimesScreen(
     viewModel: PrayerTimesViewModel = koinViewModel(),
+    onBackClick:()->Unit,
     onNavigateHome: () -> Unit,
     onNavigateNotifications: () -> Unit
 ) {
@@ -92,16 +96,12 @@ fun PrayerTimesScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(scrollState)
+                    .statusBarsPadding()
             ) {
                 // Background Header Image
-                Image(
-                    painter = painterResource(id = R.drawable.top_bg_main),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.sdp),
-                    contentScale = ContentScale.FillBounds
-                )
+                Image(modifier = Modifier.padding(20.sdp).size(26.sdp).clickable(){
+                    onBackClick()
+                }, painter = painterResource(R.drawable.ic_arrow_back), contentDescription = null)
 
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -113,7 +113,7 @@ fun PrayerTimesScreen(
                     // Logo
                     Image(
                         painter = painterResource(id = R.drawable.logo),
-                        contentDescription = "Logo",
+                        contentDescription = stringResource(R.string.logo_desc),
                         modifier = Modifier
                             .width(110.sdp)
                             .height(75.sdp),
@@ -141,15 +141,15 @@ fun PrayerTimesScreen(
                     )
 
                     // Date
-                    Text(
-                        text = currentDate.ifEmpty { "Loading Date..." },
+                     Text(
+                        text = currentDate.ifEmpty { stringResource(R.string.loading_date) },
                         fontSize = 14.ssp,
                         fontWeight = FontWeight.Medium,
                         color = LightBlueTeal
                     )
                     // Hijri Date Placeholder
-                    Text(
-                        text = "11 Rajab 1447 AH", // Still hardcoded for now or fetch if available
+                     Text(
+                        text = stringResource(R.string.hijri_date_full_placeholder), // Still hardcoded for now or fetch if available
                         fontSize = 14.ssp,
                         fontWeight = FontWeight.Medium,
                         color = LightBlueTeal
@@ -164,24 +164,24 @@ fun PrayerTimesScreen(
                             .padding(horizontal = 12.sdp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(
-                            text = "PRAYER",
+                         Text(
+                            text = stringResource(R.string.header_prayer),
                             fontSize = 12.ssp,
                             fontWeight = FontWeight.Bold,
                             color = LightBlueTeal,
                             modifier = Modifier.weight(1f),
                             textAlign = TextAlign.Center
                         )
-                        Text(
-                            text = "BEGINNING",
+                         Text(
+                            text = stringResource(R.string.header_beginning),
                             fontSize = 12.ssp,
                             fontWeight = FontWeight.Bold,
                             color = LightBlueTeal,
                             modifier = Modifier.weight(1f),
                             textAlign = TextAlign.Center
                         )
-                        Text(
-                            text = "JAMAAT",
+                         Text(
+                            text = stringResource(R.string.header_jamaat),
                             fontSize = 12.ssp,
                             fontWeight = FontWeight.Bold,
                             color = LightBlueTeal,
@@ -219,32 +219,32 @@ fun PrayerTimesScreen(
 
                     val currentPrayer by viewModel.highlightedPrayer.collectAsState()
 
-                    PrayerTimeRow(
-                        name = "FAJR", 
+                     PrayerTimeRow(
+                        name = stringResource(R.string.prayer_fajr), 
                         begin = data.fajr.start, 
                         jamaat = data.fajr.jamaat,
                         isHighlighted = currentPrayer == "FAJR"
                     )
                     PrayerTimeRow(
-                        name = "DHUHR",
+                        name = stringResource(R.string.prayer_dhuhr),
                         begin = to24Hour(data.dhuhr.start),
                         jamaat = to24Hour(data.dhuhr.jamaat),
                         isHighlighted = currentPrayer == "DHUHR"
                     )
                     PrayerTimeRow(
-                        name = "ASR", 
+                        name = stringResource(R.string.prayer_asr), 
                         begin = to24Hour(data.asr.start), 
                         jamaat = to24Hour(data.asr.jamaat),
                         isHighlighted = currentPrayer == "ASR"
                     )
                     PrayerTimeRow(
-                        name = "MAGHRIB",
+                        name = stringResource(R.string.prayer_maghrib),
                         begin = to24Hour(data.maghrib.start),
                         jamaat = to24Hour(data.maghrib.jamaat),
                         isHighlighted = currentPrayer == "MAGHRIB"
                     )
                     PrayerTimeRow(
-                        name = "ISHA", 
+                        name = stringResource(R.string.prayer_isha), 
                         begin = to24Hour(data.isha.start), 
                         jamaat = to24Hour(data.isha.jamaat),
                         isHighlighted = currentPrayer == "ISHA"
@@ -262,8 +262,8 @@ fun PrayerTimesScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(
-                                text = "SUNRISE",
+                             Text(
+                                text = stringResource(R.string.sunrise_label),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 10.ssp,
                                 color = LightBlueTeal
@@ -277,8 +277,8 @@ fun PrayerTimesScreen(
                             )
                         }
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(
-                                text = "1 JUMUAH",
+                             Text(
+                                text = stringResource(R.string.jumuah_1),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 10.ssp,
                                 color = LightBlueTeal
@@ -292,8 +292,8 @@ fun PrayerTimesScreen(
                             )
                         }
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(
-                                text = "2 JUMUAH",
+                             Text(
+                                text = stringResource(R.string.jumuah_2),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 10.ssp,
                                 color = LightBlueTeal

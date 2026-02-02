@@ -13,6 +13,7 @@ import java.util.Calendar
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.Date
 
 interface AlarmScheduler {
     fun schedule(item: PrayerTimes, targetDateInMillis: Long = System.currentTimeMillis())
@@ -25,17 +26,21 @@ class AndroidAlarmScheduler(
 ) : AlarmScheduler {
 
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    private var minFutureTime = Long.MAX_VALUE
 
     override fun schedule(items: List<PrayerTimes>) {
+        Log.d("AlarmScheduler", "=== STARTING FULL SCHEDULE (${items.size} days) ===")
+        minFutureTime = Long.MAX_VALUE
         items.forEach { timing ->
             // Extract the date from date string
-            val dateFormat = SimpleDateFormat("dd-MMM", Locale.US)
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
             try {
                 val date = dateFormat.parse(timing.date)
                 if (date != null) {
                     val cal = Calendar.getInstance()
                     cal.time = date
-                    val baseRequestCode = (cal.get(Calendar.MONTH) * 100 + cal.get(Calendar.DAY_OF_MONTH)) * 20
+                    // Use a larger spacing (e.g., 50) to avoid collisions between days
+                    val baseRequestCode = (cal.get(Calendar.YEAR) % 100 * 100000) + (cal.get(Calendar.MONTH) * 100 + cal.get(Calendar.DAY_OF_MONTH)) * 50
                     scheduleWithBaseCode(timing, cal.timeInMillis, baseRequestCode)
                 }
             } catch (e: Exception) {
@@ -104,7 +109,7 @@ class AndroidAlarmScheduler(
                         hour += 12
                     }
                 }
-                // Fajr is always AM, Jumuah uses 24h strings (13:00)
+                // Fajr is always AM
             }
 
             val calendar = Calendar.getInstance().apply {
@@ -117,7 +122,12 @@ class AndroidAlarmScheduler(
                 set(Calendar.MILLISECOND, 0)
             }
 
-            if (calendar.timeInMillis > System.currentTimeMillis()) {
+            val currentTime = System.currentTimeMillis()
+            val isFuture = calendar.timeInMillis > currentTime
+            
+            Log.d("AlarmScheduler", "[DEBUG] Testing $prayerName $type: Time=${calendar.time}, Now=${Date(currentTime)}, Diff=${calendar.timeInMillis - currentTime}ms")
+
+            if (isFuture) {
                 val intent = Intent(context, PrayerNotificationReceiver::class.java).apply {
                     putExtra("PRAYER_NAME", prayerName)
                     putExtra("TYPE", type)
@@ -137,9 +147,9 @@ class AndroidAlarmScheduler(
                             calendar.timeInMillis,
                             pendingIntent
                         )
-                         Log.d("AlarmScheduler", "Scheduled $prayerName $type at ${calendar.time}")
+                         Log.d("AlarmScheduler", "SUCCESS: Scheduled $prayerName $type for ${calendar.time} (Code: $requestCode)")
                     } else {
-                         Log.e("AlarmScheduler", "Cannot schedule exact alarms: permission denied")
+                         Log.e("AlarmScheduler", "PERMISSION DENIED: No exact alarm permission for $prayerName")
                     }
                 } else {
                      alarmManager.setExactAndAllowWhileIdle(
@@ -147,21 +157,22 @@ class AndroidAlarmScheduler(
                         calendar.timeInMillis,
                         pendingIntent
                     )
-                     Log.d("AlarmScheduler", "Scheduled $prayerName $type at ${calendar.time}")
+                     Log.d("AlarmScheduler", "SUCCESS: Scheduled $prayerName $type for ${calendar.time} (Code: $requestCode)")
                 }
                 
                 // Track next nearest alarm
                 if (calendar.timeInMillis < minFutureTime) {
+                    val oldMin = minFutureTime
                     minFutureTime = calendar.timeInMillis
+                    Log.d("AlarmScheduler", "MIN_UPDATE: Nearest notification is now $prayerName $type at ${calendar.time} (Old was ${if (oldMin == Long.MAX_VALUE) "None" else Date(oldMin)})")
                 }
+            } else {
+                Log.d("AlarmScheduler", "SKIP: $prayerName $type at ${calendar.time} is in the past")
             }
         } catch (e: Exception) {
-            Log.e("AlarmScheduler", "Error scheduling alarm: ${e.message}")
+            Log.e("AlarmScheduler", "ERROR scheduling $prayerName: ${e.message}")
         }
     }
-    
-    // Variable to track the nearest alarm time across all calls
-    private var minFutureTime = Long.MAX_VALUE
     
     // Coroutine scope for background logging
     private val scope = CoroutineScope(Dispatchers.IO)

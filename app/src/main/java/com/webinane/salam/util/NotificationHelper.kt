@@ -113,6 +113,7 @@ class NotificationHelper(private val context: Context) {
         // Cancel previous notification to stop sound immediately
         notificationManager.cancel(NOTIFICATION_ID)
         notificationManager.notify(NOTIFICATION_ID, builder.build())
+        android.util.Log.d("NotificationHelper", "Posting notification to system: $title")
         
         // Manually play sound for reliability
         playCustomSound(soundOption)
