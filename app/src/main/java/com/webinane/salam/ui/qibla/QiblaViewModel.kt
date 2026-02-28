@@ -1,4 +1,4 @@
-package com.webinane.salam.ui.viewmodel
+package com.webinane.salam.ui.qibla
 
 import android.annotation.SuppressLint
 import android.content.Context

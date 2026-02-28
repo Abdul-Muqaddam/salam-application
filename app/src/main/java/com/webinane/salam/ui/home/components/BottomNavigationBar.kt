@@ -15,7 +15,12 @@ import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
 @Composable
-fun BottomNavigationBar(onNavigateNotifications: () -> Unit) {
+fun BottomNavigationBar(
+    currentRoute: String,
+    onNavigateHome: () -> Unit,
+    onNavigateNotifications: () -> Unit,
+    onNavigateAdmin: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -28,9 +33,24 @@ fun BottomNavigationBar(onNavigateNotifications: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            BottomNavItem(iconRes = R.drawable.ic_home, label = "Home", isSelected = true)
-            BottomNavItem(iconRes = R.drawable.ic_notifications, label = "Alerts", onClick = onNavigateNotifications)
-            BottomNavItem(iconRes = R.drawable.ic_menu, label = "More")
+            BottomNavItem(
+                iconRes = R.drawable.ic_home, 
+                label = "Home", 
+                isSelected = currentRoute == "Home",
+                onClick = onNavigateHome
+            )
+            BottomNavItem(
+                iconRes = R.drawable.ic_notifications, 
+                label = "Alerts", 
+                isSelected = currentRoute == "Alerts",
+                onClick = onNavigateNotifications
+            )
+            BottomNavItem(
+                iconRes = R.drawable.ic_menu, 
+                label = "Admin", 
+                isSelected = currentRoute == "Admin",
+                onClick = onNavigateAdmin
+            )
         }
     }
 }

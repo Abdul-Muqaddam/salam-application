@@ -1,4 +1,4 @@
-package com.webinane.salam.ui.viewmodel
+package com.webinane.salam.ui.ramadan
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

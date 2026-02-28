@@ -22,7 +22,7 @@ import com.webinane.salam.ui.theme.LightBlueTeal
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 import org.koin.androidx.compose.koinViewModel
-import com.webinane.salam.ui.viewmodel.DhikrViewModel
+import com.webinane.salam.ui.home.DhikrViewModel
 
 @Composable
 fun DhikrCounter() {

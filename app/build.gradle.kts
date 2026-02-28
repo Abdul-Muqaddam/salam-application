@@ -1,3 +1,8 @@
+
+
+import java.util.Properties
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -21,7 +26,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
         // Load API key from local.properties
-        val properties = org.jetbrains.kotlin.konan.properties.Properties()
+        val properties = Properties()
         val localPropertiesFile = rootProject.file("local.properties")
         if (localPropertiesFile.exists()) {
             localPropertiesFile.inputStream().use { properties.load(it) }
@@ -29,6 +34,19 @@ android {
         
         // Add API key to BuildConfig (use empty string as fallback)
         buildConfigField("String", "METAL_API_KEY", "\"${properties.getProperty("METAL_API_KEY", "")}\"")
+        
+        val fcmJson = properties.getProperty("FCM_SERVICE_ACCOUNT_JSON", "")
+        // Robust escaping:
+        // 1. Escape backslashes first to preserve existing escapes like \n
+        // 2. Escape double quotes
+        // 3. Flatten newlines to \\n to prevent unclosed string literals
+        val escapedFcmJson = fcmJson
+            .replace("\\", "\\\\")
+            .replace("\"", "\\\"")
+            .replace("\r", "")
+            .replace("\n", "\\n")
+            
+        buildConfigField("String", "FCM_SERVICE_ACCOUNT_JSON", "\"$escapedFcmJson\"")
     }
 
     buildTypes {
@@ -44,16 +62,40 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_1_8)
+        }
+    }
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
     }
     buildFeatures {
         compose = true
         buildConfig = true  // Enable BuildConfig generation
     }
+    
+    packaging {
+        resources {
+            excludes += "META-INF/DEPENDENCIES"
+            excludes += "META-INF/LICENSE"
+            excludes += "META-INF/LICENSE.txt"
+            excludes += "META-INF/license.txt"
+            excludes += "META-INF/NOTICE"
+            excludes += "META-INF/NOTICE.txt"
+            excludes += "META-INF/notice.txt"
+            excludes += "META-INF/ASL2.0"
+            excludes += "META-INF/*.kotlin_module"
+        }
+    }
 }
 
 dependencies {
+    // Core library desugaring for kotlinx.datetime (required by Adhan)
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+    
+    // Adhan library for prayer time calculations (v1.2.1 compatible with Kotlin 2.0.x)
+    implementation("com.batoulapps.adhan:adhan:1.2.1")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -64,6 +106,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.firebase.database)
+    implementation(libs.firebase.messaging)
     implementation(libs.koin.androidx.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.navigation.compose)
@@ -87,4 +130,19 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Google Auth for FCM V1
+    implementation(libs.google.auth.library.oauth2.http) {
+        exclude(group = "org.apache.httpcomponents", module = "httpclient")
+    }
+
+    // Retrofit & Networking
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp.logging)
+
+    // Media3 (ExoPlayer)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.media3.session)
 }

@@ -24,7 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.draw.clip
 import org.koin.androidx.compose.koinViewModel
-import com.webinane.salam.ui.viewmodel.IslamicCalendarViewModel
+import com.webinane.salam.ui.ramadan.IslamicCalendarViewModel
 
 @Composable
 fun IslamicCalendar() {

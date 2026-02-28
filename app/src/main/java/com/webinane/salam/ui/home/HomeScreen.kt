@@ -7,7 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.webinane.salam.ui.home.components.*
 import com.webinane.salam.ui.theme.ScaffoldBackground
-import com.webinane.salam.ui.viewmodel.PrayerTimesViewModel
+import com.webinane.salam.ui.PrayerTimesViewModel
 import ir.kaaveh.sdpcompose.sdp
 import org.koin.androidx.compose.koinViewModel
 
@@ -17,26 +17,38 @@ fun HomeScreen(
     onNavigateNotifications: () -> Unit,
     onNavigateZakat: () -> Unit,
     onNavigateQibla: () -> Unit = {},
-    viewModel: PrayerTimesViewModel = koinViewModel()
+    onNavigateRamadan: () -> Unit = {},
+    onNavigateQuran: () -> Unit = {},
+    onNavigateDua: () -> Unit = {},
+    onNavigateAdmin: () -> Unit = {},
+    viewModel: PrayerTimesViewModel = koinViewModel(),
+    duaViewModel: com.webinane.salam.ui.dua.DuaViewModel = koinViewModel()
 ) {
     val prayerTiming by viewModel.prayerTiming.collectAsState()
     val currentTime by viewModel.currentTime.collectAsState()
     val currentDate by viewModel.currentDate.collectAsState()
+    val hijriDate by viewModel.hijriDate.collectAsState()
     val currentPrayerName by viewModel.highlightedPrayer.collectAsState()
     val countdownTimer by viewModel.countdownTimer.collectAsState()
+    val bookmarkedDuas by duaViewModel.bookmarkedDuas.collectAsState()
 
     Scaffold(
         bottomBar = {
-            BottomNavigationBar(onNavigateNotifications)
+            BottomNavigationBar(
+                currentRoute = "Home",
+                onNavigateHome = {},
+                onNavigateNotifications = onNavigateNotifications,
+                onNavigateAdmin = onNavigateAdmin
+            )
         },
         containerColor = ScaffoldBackground // Light background
-    ) { padding ->
+    ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
         ) {
             item {
-                HomeHeader(currentTime, currentDate, onNavigateNotifications)
+                HomeHeader(currentTime, currentDate, hijriDate, onNavigateNotifications)
             }
 
             item {
@@ -70,7 +82,10 @@ fun HomeScreen(
             item {
                 QuickActions(
                     onNavigateZakat = onNavigateZakat,
-                    onNavigateQibla = onNavigateQibla
+                    onNavigateQibla = onNavigateQibla,
+                    onNavigateRamadan = onNavigateRamadan,
+                    onNavigateQuran = onNavigateQuran,
+                    onNavigateDua = onNavigateDua
                 )
             }
 
@@ -80,14 +95,6 @@ fun HomeScreen(
                     currentPrayer = currentPrayerName,
                     onSeeAll = onNavigatePrayerTimes
                 )
-            }
-
-            item {
-                MosqueInfo()
-            }
-
-            item {
-                Announcements()
             }
             
             item {
@@ -99,15 +106,14 @@ fun HomeScreen(
             }
             
             item {
-                DailyDuas()
-            }
-            
-            item {
-                CommunityStats()
+                DailyDuas(
+                    bookmarkedDuas = bookmarkedDuas,
+                    onViewMore = onNavigateDua
+                )
             }
 
             item {
-                Spacer(modifier = Modifier.height(padding.calculateBottomPadding() + 20.sdp))
+                Spacer(modifier = Modifier.height(paddingValues.calculateBottomPadding() + 20.sdp))
             }
         }
     }

@@ -17,39 +17,3 @@ import com.webinane.salam.ui.theme.LightBlueTeal
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
-@Composable
-fun Announcements() {
-    Column(modifier = Modifier.padding(16.sdp)) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = stringResource(R.string.announcements_title), fontSize = 14.ssp, fontWeight = FontWeight.Bold, color = LightBlueTeal)
-            Text(text = stringResource(R.string.view_all), fontSize = 10.ssp, color = LightBlueTeal)
-        }
-        Spacer(modifier = Modifier.height(10.sdp))
-        Card(
-            shape = RoundedCornerShape(12.sdp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.sdp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(modifier = Modifier.padding(12.sdp), verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(36.sdp)
-                        .background(LightBlueTeal.copy(alpha = 0.1f), CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_campaign), contentDescription = null, tint = LightBlueTeal, modifier = Modifier.size(20.sdp))
-                }
-                Spacer(modifier = Modifier.width(10.sdp))
-                Column {
-                    Text(text = stringResource(R.string.jummah_announcement_title), fontSize = 12.ssp, fontWeight = FontWeight.Bold, color = DarkBlueNavy)
-                    Text(text = stringResource(R.string.jummah_announcement_desc), fontSize = 10.ssp, color = Color.Gray)
-                }
-            }
-        }
-    }
-}

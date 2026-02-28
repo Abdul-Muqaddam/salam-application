@@ -1,4 +1,4 @@
-package com.webinane.salam.ui.viewmodel
+package com.webinane.salam.ui.home
 
 import androidx.lifecycle.ViewModel
 import com.webinane.salam.data.local.DhikrPreference

@@ -34,12 +34,24 @@ class PrayerNotificationReceiver : BroadcastReceiver() {
         val prayerDao: PrayerDao by inject(PrayerDao::class.java)
         val workManager: WorkManager by inject(WorkManager::class.java)
 
+        val (title, message) = when (prayerName) {
+            "Suhoor" -> {
+                if (type == "Start") {
+                    "Suhoor Started" to "Suhoor time has started. Prepare for your fast."
+                } else {
+                    "Suhoor Ending" to "Suhoor time is ending. Please stop eating and drinking."
+                }
+            }
+            "Iftar" -> "Iftar Time" to "Time for Iftar! Break your fast and enjoy your meal."
+            else -> "Prayer Time" to "It's time for $prayerName ($type)"
+        }
+
         notificationHelper.showNotification(
-            title = "Prayer Time",
-            message = "It's time for $prayerName ($type)",
+            title = title,
+            message = message,
             soundOption = soundOption
         )
-        android.util.Log.d("NotificationReceiver", "NOTIFICATION SHOWN: $prayerName ($type)")
+        android.util.Log.d("NotificationReceiver", "NOTIFICATION SHOWN: $title - $message")
 
         // Self-healing: Check if we have enough data left
         CoroutineScope(Dispatchers.IO).launch {

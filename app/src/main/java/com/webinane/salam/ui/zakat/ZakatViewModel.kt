@@ -1,4 +1,4 @@
-package com.webinane.salam.ui.viewmodel
+package com.webinane.salam.ui.zakat
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

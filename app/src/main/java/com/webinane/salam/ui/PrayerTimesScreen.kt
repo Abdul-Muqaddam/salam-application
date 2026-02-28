@@ -48,13 +48,10 @@ import com.webinane.salam.ui.theme.LightBlueHighlight
 import com.webinane.salam.ui.theme.LightBlueRow
 import com.webinane.salam.ui.theme.LightBlueTeal
 import com.webinane.salam.ui.theme.SectionBackground
-import ir.kaaveh.sdpcompose.sdp
-import ir.kaaveh.sdpcompose.ssp
 
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.webinane.salam.domain.model.PrayerTimes
-import com.webinane.salam.ui.viewmodel.PrayerTimesViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -68,6 +65,7 @@ fun PrayerTimesScreen(
     val prayerTimes by viewModel.prayerTiming.collectAsState()
     val currentTime by viewModel.currentTime.collectAsState()
     val currentDate by viewModel.currentDate.collectAsState()
+    val hijriDate by viewModel.hijriDate.collectAsState()
 
     Box(
         modifier = Modifier
@@ -141,15 +139,15 @@ fun PrayerTimesScreen(
                     )
 
                     // Date
-                     Text(
+                    Text(
                         text = currentDate.ifEmpty { stringResource(R.string.loading_date) },
                         fontSize = 14.ssp,
                         fontWeight = FontWeight.Medium,
                         color = LightBlueTeal
                     )
-                    // Hijri Date Placeholder
+                    // Hijri Date
                      Text(
-                        text = stringResource(R.string.hijri_date_full_placeholder), // Still hardcoded for now or fetch if available
+                        text = hijriDate.ifEmpty { stringResource(R.string.loading_date) },
                         fontSize = 14.ssp,
                         fontWeight = FontWeight.Medium,
                         color = LightBlueTeal

@@ -43,6 +43,7 @@ import org.koin.compose.koinInject
 @Composable
 fun NotificationScreen(
     onNavigateHome: () -> Unit,
+    onNavigateAdmin: () -> Unit,
     preference: NotificationPreference = koinInject()
 ) {
     var selectedOption by remember { mutableStateOf(preference.getSoundOption()) }
@@ -153,39 +154,13 @@ fun NotificationScreen(
         Box(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .navigationBarsPadding()
-                .fillMaxWidth()
-                .height(60.sdp)
-                .clip(RoundedCornerShape(topStart = 22.sdp, topEnd = 22.sdp))
-                .background(LightBlueBackground)
         ) {
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.clickable { onNavigateHome() }
-                ) {
-                    Icon(
-                        painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_home),
-                        contentDescription = stringResource(R.string.home_desc),
-                        tint = LightBlueTeal,
-                        modifier = Modifier.size(24.sdp)
-                    )
-                    Text(stringResource(R.string.home_menu), color = LightBlueTeal, fontSize = 9.ssp)
-                }
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_notifications),
-                        contentDescription = stringResource(R.string.notification_nav),
-                        tint = LightBlueTeal,
-                        modifier = Modifier.size(24.sdp)
-                    )
-                    Text(stringResource(R.string.notification_nav), color = LightBlueTeal, fontSize = 9.ssp)
-                }
-            }
+             com.webinane.salam.ui.home.components.BottomNavigationBar(
+                currentRoute = "Alerts",
+                onNavigateHome = onNavigateHome,
+                onNavigateNotifications = {},
+                onNavigateAdmin = onNavigateAdmin
+            )
         }
     }
 }

@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 import com.webinane.salam.R
 import com.webinane.salam.ui.theme.DarkBlueNavy
 import com.webinane.salam.ui.theme.LightBlueTeal
-import com.webinane.salam.ui.viewmodel.ZakatViewModel
+import com.webinane.salam.ui.zakat.ZakatViewModel
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 import org.koin.androidx.compose.koinViewModel
@@ -264,7 +264,7 @@ fun StatCard(title: String, subtitle: String, value: String, modifier: Modifier 
 }
 
 @Composable
-fun AssetsInputSection(viewModel: ZakatViewModel, state: com.webinane.salam.ui.viewmodel.ZakatState) {
+fun AssetsInputSection(viewModel: ZakatViewModel, state: com.webinane.salam.ui.zakat.ZakatState) {
     Column {
         Text(text = "Your Assets", fontSize = 16.ssp, fontWeight = FontWeight.Bold, color = DarkBlueNavy)
         Text(text = "Enter all your zakatable assets", fontSize = 11.ssp, color = Color.Gray)
@@ -317,7 +317,7 @@ fun AssetsInputSection(viewModel: ZakatViewModel, state: com.webinane.salam.ui.v
 }
 
 @Composable
-fun LiabilitiesSection(viewModel: ZakatViewModel, state: com.webinane.salam.ui.viewmodel.ZakatState) {
+fun LiabilitiesSection(viewModel: ZakatViewModel, state: com.webinane.salam.ui.zakat.ZakatState) {
     Column {
         Text(text = "Liabilities", fontSize = 16.ssp, fontWeight = FontWeight.Bold, color = DarkBlueNavy)
         Text(text = "Deduct your immediate debts", fontSize = 11.ssp, color = Color.Gray)
@@ -561,7 +561,7 @@ fun NisabItem(label: String, quantity: String, value: String, iconRes: Int) {
 }
 
 @Composable
-fun CalculationSummarySection(state: com.webinane.salam.ui.viewmodel.ZakatState) {
+fun CalculationSummarySection(state: com.webinane.salam.ui.zakat.ZakatState) {
     Card(
         shape = RoundedCornerShape(12.sdp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFF1F3F5)),
@@ -616,7 +616,7 @@ fun CalculateButton(onClick: () -> Unit) {
 }
 
 @Composable
-fun ResultSection(state: com.webinane.salam.ui.viewmodel.ZakatState) {
+fun ResultSection(state: com.webinane.salam.ui.zakat.ZakatState) {
     val context = LocalContext.current
     
     // Function to share Zakat results

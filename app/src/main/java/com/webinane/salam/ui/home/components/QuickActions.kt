@@ -26,7 +26,10 @@ import ir.kaaveh.sdpcompose.ssp
 @Composable
 fun QuickActions(
     onNavigateZakat: () -> Unit = {},
-    onNavigateQibla: () -> Unit = {}
+    onNavigateQibla: () -> Unit = {},
+    onNavigateRamadan: () -> Unit = {},
+    onNavigateQuran: () -> Unit = {},
+    onNavigateDua: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -68,15 +71,16 @@ fun QuickActions(
                 iconRes = R.drawable.ic_ramadan,
                 backgroundColor = LightBlueTeal.copy(alpha = 0.1f),
                 iconColor = LightBlueTeal,
-                onClick = {}
+                onClick = onNavigateRamadan
             )
+
             FeatureActionButton(
                 modifier = Modifier.weight(1f),
                 title = "Quran",
                 iconRes = R.drawable.ic_quran,
                 backgroundColor = LightBlueTeal.copy(alpha = 0.1f),
                 iconColor = LightBlueTeal,
-                onClick = {}
+                onClick = onNavigateQuran
             )
             FeatureActionButton(
                 modifier = Modifier.weight(1f),
@@ -84,7 +88,7 @@ fun QuickActions(
                 iconRes = R.drawable.ic_duas,
                 backgroundColor = LightBlueTeal.copy(alpha = 0.1f),
                 iconColor = LightBlueTeal,
-                onClick = {}
+                onClick = onNavigateDua
             )
         }
     }

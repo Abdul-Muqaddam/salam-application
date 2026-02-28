@@ -8,6 +8,7 @@ data class PrayerTimes(
     val asr: PrayerTimesDetail,
     val maghrib: PrayerTimesDetail,
     val isha: PrayerTimesDetail,
+    val jummah: PrayerTimesDetail? = null,
     val sunrise: String
 )
 

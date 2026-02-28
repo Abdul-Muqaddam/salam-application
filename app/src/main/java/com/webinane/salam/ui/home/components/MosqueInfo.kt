@@ -16,36 +16,3 @@ import com.webinane.salam.ui.theme.LightBlueTeal
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
-@Composable
-fun MosqueInfo() {
-    Column(modifier = Modifier.padding(16.sdp)) {
-        Text(text = stringResource(R.string.nearby_mosque), fontSize = 14.ssp, fontWeight = FontWeight.Bold, color = LightBlueTeal)
-        Spacer(modifier = Modifier.height(10.sdp))
-        Card(
-            shape = RoundedCornerShape(12.sdp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.sdp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(modifier = Modifier.padding(12.sdp), verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(45.sdp)
-                        .background(LightBlueTeal, RoundedCornerShape(10.sdp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_location), contentDescription = null, tint = Color.White)
-                }
-                Spacer(modifier = Modifier.width(12.sdp))
-                Column {
-                    Text(text = stringResource(R.string.mosque_name_placeholder), fontSize = 13.ssp, fontWeight = FontWeight.Bold, color = DarkBlueNavy)
-                    Text(text = stringResource(R.string.mosque_location_placeholder), fontSize = 10.ssp, color = Color.Gray)
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_star), contentDescription = null, tint = LightBlueTeal, modifier = Modifier.size(12.sdp))
-                        Text(text = stringResource(R.string.mosque_reviews_placeholder), fontSize = 10.ssp, color = Color.Gray)
-                    }
-                }
-            }
-        }
-    }
-}

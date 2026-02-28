@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import com.webinane.salam.ui.qibla.components.*
-import com.webinane.salam.ui.viewmodel.QiblaViewModel
 import ir.kaaveh.sdpcompose.sdp
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.material3.AlertDialog
@@ -36,6 +35,8 @@ fun QiblaFinderScreen(
         }
     }
 
+    // Show sensor missing dialog only if sensors are not available
+    if (!state.hasSensors) {
         AlertDialog(
             onDismissRequest = { /* No dismiss, only through button */ },
             containerColor = Color.White,
@@ -51,7 +52,7 @@ fun QiblaFinderScreen(
             },
             text = {
                 Text(
-                    text = "Sorry, your mobile phone don't have sensor so you can't find out the direct from this mobile phone",
+                    text = "Sorry, your mobile phone doesn't have the required sensors to find the Qibla direction.",
                     fontSize = 14.ssp
                 )
             },
@@ -68,6 +69,8 @@ fun QiblaFinderScreen(
                 }
             }
         )
+    }
+
 
 
     Column(

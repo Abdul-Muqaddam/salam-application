@@ -20,7 +20,7 @@ import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
 @Composable
-fun HomeHeader(currentTime: String, currentDate: String, onNavigateNotifications: () -> Unit) {
+fun HomeHeader(currentTime: String, currentDate: String, hijriDate: String, onNavigateNotifications: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -110,7 +110,7 @@ fun HomeHeader(currentTime: String, currentDate: String, onNavigateNotifications
                     color = Color.White.copy(alpha = 0.8f)
                 )
                 Text(
-                    text = stringResource(R.string.hijri_date_placeholder), // Placeholder
+                    text = hijriDate.ifEmpty { stringResource(R.string.loading) },
                     fontSize = 12.ssp,
                     color = Color.White.copy(alpha = 0.7f),
                     modifier = Modifier.padding(top = 4.sdp)
